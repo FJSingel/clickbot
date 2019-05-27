@@ -1,10 +1,13 @@
 #!/usr/bin/python
-'''
+modes = '''
 Modes
-0: Measures coordinates
+0: Measure coordinates
 1: Ivy
 2: Superglass
 3: Alching
+4: Combining
+5: HoM Div Clicks
+6: Smithing
 '''
 
 import pyautogui, sys, time, random
@@ -20,8 +23,12 @@ def main(argv):
 		Superglass();
 	elif which == 3:
 		Alching();
+	elif which == 4:
+		Combining();
+	elif which == 5:
+		HallClicking();
 	else:
-		print("Number not deefined yet")
+		print(modes);
 
 def Measure():
 	try:
@@ -57,10 +64,72 @@ def Ivy():
 		print("Clicking done\n")
 
 def Superglass():
-	print("Glass")
+	print("Press CTRL+C to quit glassing")
+	time.sleep(1)
+	try:		
+		while True:
+			pyautogui.moveTo(953, 450, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('1');
+			pyautogui.keyUp('1');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('2');
+			pyautogui.keyUp('2');
+			time.sleep(fuzz_time(2.1, .25));
+	except KeyboardInterrupt:
+		print("Clicking done\n")
 
 def Alching():
-	print("Alch")
+	print("Press CTRL+C to quit alching")
+	try:		
+		while True:
+			pyautogui.moveTo(1735, 835, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			pyautogui.click();
+			time.sleep(fuzz_time(2, .15));
+	except KeyboardInterrupt:
+		print("Clicking done\n")
+
+def Combining():
+	print("Press CTRL+C to quit combining")
+	time.sleep(1)
+	try:		
+		while True:
+			pyautogui.moveTo(953, 450, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('1');
+			pyautogui.keyUp('1');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('1');
+			pyautogui.keyUp('1');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.press('space');	
+			time.sleep(fuzz_time(17, .25));
+	except KeyboardInterrupt:
+		print("Clicking done\n")
+
+def HallClicking():
+	print("Press CTRL+C to quit clicking")
+	try:		
+		while True:
+			try:
+				mouseOver = pyautogui.locateCenterOnScreen('FadedMems.png');
+				pyautogui.click();
+				print(mouseOver)
+			except Exception as e:
+				print("Not found")
+			time.sleep(.2);
+	except KeyboardInterrupt:
+		print("Clicking done\n")
+
+def fuzz_time(min_time, pct_increase):
+	fuzz_factor = (random.random() * pct_increase) + 1;
+	return (min_time * fuzz_factor);
 
 if __name__ == "__main__":
-	main(sys.argv[1:])
+	try:
+		main(sys.argv[1:])
+	except IndexError:
+		print (modes);
