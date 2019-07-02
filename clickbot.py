@@ -8,6 +8,7 @@ Modes
 4: Combining
 5: HoM Div Clicks
 6: Smithing
+7: Idling
 '''
 
 import pyautogui, sys, time, random
@@ -27,6 +28,10 @@ def main(argv):
 		Combining();
 	elif which == 5:
 		HallClicking();
+	elif which == 6:
+		Smithing();
+	elif which == 7:
+		Idling();
 	else:
 		print(modes);
 
@@ -71,8 +76,8 @@ def Superglass():
 			pyautogui.moveTo(953, 450, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('1');
-			pyautogui.keyUp('1');
+			pyautogui.keyDown('2');
+			pyautogui.keyUp('2');
 			time.sleep(fuzz_time(1.1, .25));
 			pyautogui.keyDown('2');
 			pyautogui.keyUp('2');
@@ -123,6 +128,24 @@ def HallClicking():
 			time.sleep(.2);
 	except KeyboardInterrupt:
 		print("Clicking done\n")
+
+def Smithing():
+	print("Not yet Implemented:")
+
+def Idling():
+	print("Press CTRL+C to quit idling")
+	try:		
+		while True:
+			try:
+				pyautogui.keyDown('left');
+				time.sleep(fuzz_time(.1, 3));
+				pyautogui.keyUp('left');
+				time.sleep(fuzz_time(120, 1));
+			except Exception as e:
+				print("Not found")
+			time.sleep(.2);
+	except KeyboardInterrupt:
+		print("Idling done\n")
 
 def fuzz_time(min_time, pct_increase):
 	fuzz_factor = (random.random() * pct_increase) + 1;
