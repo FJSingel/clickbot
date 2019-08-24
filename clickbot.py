@@ -9,6 +9,7 @@ Modes
 5: HoM Div Clicks
 6: Smithing
 7: Idling
+8: Herblore Dirty
 '''
 
 import pyautogui, sys, time, random
@@ -32,6 +33,8 @@ def main(argv):
 		Smithing();
 	elif which == 7:
 		Idling();
+	elif which == 8:
+		Herblore();
 	else:
 		print(modes);
 
@@ -146,6 +149,39 @@ def Idling():
 			time.sleep(.2);
 	except KeyboardInterrupt:
 		print("Idling done\n")
+
+'''
+Note: This requires preset 1 to have a 9/9/9 split of Dirty Herb/Vial/Ingredient on 1
+Keys 1-3 need to be clean-mix-mix
+'''
+def Herblore():
+	print("Press CTRL+C to quit herblore")
+	time.sleep(1)
+	try:		
+		while True:
+			pyautogui.moveTo(953, 450, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('1');
+			pyautogui.keyUp('1');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('1');
+			pyautogui.keyUp('1');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.press('space');	
+			time.sleep(fuzz_time(6, .25));
+			pyautogui.keyDown('2');
+			pyautogui.keyUp('2');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.press('space');	
+			time.sleep(fuzz_time(10, .25));			
+			pyautogui.keyDown('3');
+			pyautogui.keyUp('3');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.press('space');	
+			time.sleep(fuzz_time(10, .25));
+	except KeyboardInterrupt:
+		print("Clicking done\n")
 
 def fuzz_time(min_time, pct_increase):
 	fuzz_factor = (random.random() * pct_increase) + 1;
