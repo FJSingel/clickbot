@@ -10,6 +10,7 @@ Modes
 6: Smithing
 7: Idling
 8: Herblore Dirty
+9: Herblore clean
 '''
 
 import pyautogui, sys, time, random
@@ -34,7 +35,9 @@ def main(argv):
 	elif which == 7:
 		Idling();
 	elif which == 8:
-		Herblore();
+		Herblore(True);
+	elif which == 9:
+		Herblore(False);
 	else:
 		print(modes);
 
@@ -104,7 +107,7 @@ def Combining():
 	time.sleep(1)
 	try:		
 		while True:
-			pyautogui.moveTo(953, 450, .5, pyautogui.easeInOutQuad)
+			pyautogui.moveTo(953, 460, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			time.sleep(fuzz_time(1.1, .25));
 			pyautogui.keyDown('1');
@@ -153,23 +156,25 @@ def Idling():
 '''
 Note: This requires preset 1 to have a 9/9/9 split of Dirty Herb/Vial/Ingredient on 1
 Keys 1-3 need to be clean-mix-mix
+Do World 84 By the Combat Academy Chest
 '''
-def Herblore():
+def Herblore(cleaning):
 	print("Press CTRL+C to quit herblore")
 	time.sleep(1)
 	try:		
 		while True:
-			pyautogui.moveTo(953, 450, .5, pyautogui.easeInOutQuad)
+			pyautogui.moveTo(953, 460, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			time.sleep(fuzz_time(1.1, .25));
 			pyautogui.keyDown('1');
 			pyautogui.keyUp('1');
 			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('1');
-			pyautogui.keyUp('1');
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.press('space');	
-			time.sleep(fuzz_time(6, .25));
+			if cleaning:
+				pyautogui.keyDown('1');
+				pyautogui.keyUp('1');
+				time.sleep(fuzz_time(1.1, .25));
+				pyautogui.press('space');	
+				time.sleep(fuzz_time(6, .25));
 			pyautogui.keyDown('2');
 			pyautogui.keyUp('2');
 			time.sleep(fuzz_time(1.1, .25));
