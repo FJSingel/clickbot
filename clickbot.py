@@ -11,6 +11,7 @@ Modes
 7: Idling
 8: Herblore Dirty
 9: Herblore clean
+10: Fletching
 '''
 
 import pyautogui, sys, time, random
@@ -38,6 +39,8 @@ def main(argv):
 		Herblore(True);
 	elif which == 9:
 		Herblore(False);
+	elif which == 10:
+		Fletching();
 	else:
 		print(modes);
 
@@ -79,14 +82,14 @@ def Superglass():
 	time.sleep(1)
 	try:		
 		while True:
-			pyautogui.moveTo(953, 450, .5, pyautogui.easeInOutQuad)
+			pyautogui.moveTo(953, 460, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			time.sleep(fuzz_time(1.1, .25));
 			pyautogui.keyDown('2');
 			pyautogui.keyUp('2');
 			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('2');
-			pyautogui.keyUp('2');
+			pyautogui.keyDown('6');
+			pyautogui.keyUp('6');
 			time.sleep(fuzz_time(2.1, .25));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
@@ -117,7 +120,7 @@ def Combining():
 			pyautogui.keyUp('1');
 			time.sleep(fuzz_time(1.1, .25));
 			pyautogui.press('space');	
-			time.sleep(fuzz_time(17, .25));
+			time.sleep(fuzz_time(16, .25));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
@@ -187,6 +190,36 @@ def Herblore(cleaning):
 			time.sleep(fuzz_time(10, .25));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
+
+def Fletching():
+	print("Press CTRL+C to quit fletching")
+	time.sleep(1)
+	try:		
+		while True:
+			pyautogui.moveTo(922, 514, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('1');
+			pyautogui.keyUp('1');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.keyDown('4');
+			pyautogui.keyUp('4');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.click();
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.press('space');	
+			time.sleep(fuzz_time(25, .25));			
+			pyautogui.keyDown('5');
+			pyautogui.keyUp('5');
+			time.sleep(fuzz_time(1.1, .25));
+			pyautogui.press('space');	
+			time.sleep(fuzz_time(15, .25));
+	except KeyboardInterrupt:
+		print("Clicking done\n")
+
+
+
+'''=====================Helper Methods====================='''
 
 def fuzz_time(min_time, pct_increase):
 	fuzz_factor = (random.random() * pct_increase) + 1;
