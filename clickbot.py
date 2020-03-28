@@ -16,9 +16,25 @@ Modes
 
 import pyautogui, sys, time, random
 
+LAG_CONSTANT = 1.0;
+iteration_limit = 8000;
+second_limit = 4*60*60;
+start_second = int(time.time());
+iteration_count = 0;
+end_time = time.time();
+
 def main(argv):
 	# I know this is terrible. Should put methods into a list later
-	which = int(argv[0])
+	which = int(argv[0]);
+	if len(argv > 1):
+		iteration_limit = int(argv[2]);
+	if len(argv > 2):
+		second_limit = int(argv[3]) * 60.0;
+	if len(argv > 3):
+		LAG_CONSTANT = float(argv[4]);
+
+	end_time += second_limit;
+
 	if which == 0:
 		Measure();
 	elif which == 1:
@@ -69,7 +85,7 @@ def Ivy():
 		print("Coordinates are " + positionString)
 	print("Press CTRL+C to quit")
 	try:
-		while True:
+		while (time.time() < end_time):
 			fuzz_factor = random.random()/4 + .875
 			pyautogui.moveTo(x, y, fuzz_factor, pyautogui.easeInOutQuad)
 			pyautogui.click();
@@ -81,23 +97,17 @@ def Superglass():
 	print("Press CTRL+C to quit glassing")
 	time.sleep(1)
 	try:		
-		while True:
-			pyautogui.moveTo(953, 460, .5, pyautogui.easeInOutQuad)
-			pyautogui.click();
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('2');
-			pyautogui.keyUp('2');
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('6');
-			pyautogui.keyUp('6');
-			time.sleep(fuzz_time(2.1, .25));
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			open_bank();
+			withdraw_preset('2');
+			cast_superglass();
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
 def Alching():
 	print("Press CTRL+C to quit alching")
 	try:		
-		while True:
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			pyautogui.moveTo(1735, 835, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			pyautogui.click();
@@ -109,25 +119,20 @@ def Combining():
 	print("Press CTRL+C to quit combining")
 	time.sleep(1)
 	try:		
-		while True:
-			pyautogui.moveTo(953, 460, .5, pyautogui.easeInOutQuad)
-			pyautogui.click();
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('1');
-			pyautogui.keyUp('1');
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('1');
-			pyautogui.keyUp('1');
-			time.sleep(fuzz_time(1.1, .25));
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			open_bank();
+			withdraw_preset('1');
+			press_hotkey('1');
 			pyautogui.press('space');	
-			time.sleep(fuzz_time(16, .25));
+			time.sleep(fuzz_time(14, .25));
+			iteration_count += 14;
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
 def HallClicking():
 	print("Press CTRL+C to quit clicking")
 	try:		
-		while True:
+		while (time.time() < end_time):
 			try:
 				mouseOver = pyautogui.locateCenterOnScreen('FadedMems.png');
 				pyautogui.click();
@@ -165,29 +170,21 @@ def Herblore(cleaning):
 	print("Press CTRL+C to quit herblore")
 	time.sleep(1)
 	try:		
-		while True:
-			pyautogui.moveTo(953, 460, .5, pyautogui.easeInOutQuad)
-			pyautogui.click();
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('1');
-			pyautogui.keyUp('1');
-			time.sleep(fuzz_time(1.1, .25));
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			open_bank();
+			withdraw_preset('1');
+			press_hotkey('1');
 			if cleaning:
-				pyautogui.keyDown('1');
-				pyautogui.keyUp('1');
-				time.sleep(fuzz_time(1.1, .25));
+				press_hotkey('1');
 				pyautogui.press('space');	
 				time.sleep(fuzz_time(6, .25));
-			pyautogui.keyDown('2');
-			pyautogui.keyUp('2');
-			time.sleep(fuzz_time(1.1, .25));
+			press_hotkey('1');
 			pyautogui.press('space');	
-			time.sleep(fuzz_time(10, .25));			
-			pyautogui.keyDown('3');
-			pyautogui.keyUp('3');
-			time.sleep(fuzz_time(1.1, .25));
+			time.sleep(fuzz_time(12, .25));
+			press_hotkey('3');
 			pyautogui.press('space');	
 			time.sleep(fuzz_time(10, .25));
+			iteration_count += 9
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
@@ -195,25 +192,19 @@ def Fletching():
 	print("Press CTRL+C to quit fletching")
 	time.sleep(1)
 	try:		
-		while True:
-			pyautogui.moveTo(922, 514, .5, pyautogui.easeInOutQuad)
-			pyautogui.click();
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('1');
-			pyautogui.keyUp('1');
-			time.sleep(fuzz_time(1.1, .25));
-			pyautogui.keyDown('4');
-			pyautogui.keyUp('4');
-			time.sleep(fuzz_time(1.1, .25));
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			open_bank();
+			withdraw_preset('1');
+			press_hotkey('1');
+			press_hotkey('4');
 			pyautogui.click();
 			time.sleep(fuzz_time(1.1, .25));
 			pyautogui.press('space');	
-			time.sleep(fuzz_time(25, .25));			
-			pyautogui.keyDown('5');
-			pyautogui.keyUp('5');
-			time.sleep(fuzz_time(1.1, .25));
+			time.sleep(fuzz_time(25, .25));
+			press_hotkey('5');
 			pyautogui.press('space');	
 			time.sleep(fuzz_time(15, .25));
+			iteration_count += 14;
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
@@ -223,7 +214,29 @@ def Fletching():
 
 def fuzz_time(min_time, pct_increase):
 	fuzz_factor = (random.random() * pct_increase) + 1;
-	return (min_time * fuzz_factor);
+	return (min_time * fuzz_factor * LAG_CONSTANT);
+
+def open_bank():
+	pyautogui.moveTo(922, 514, .5, pyautogui.easeInOutQuad)
+	pyautogui.click();
+	time.sleep(fuzz_time(1.1, .25));
+
+def withdraw_preset(preset):
+	pyautogui.keyDown(preset);
+	pyautogui.keyUp(preset);
+	time.sleep(fuzz_time(1.1, .25));
+
+def press_hotkey(hotkey):
+	pyautogui.keyDown(hotkey);
+	pyautogui.keyUp(hotkey);
+	time.sleep(fuzz_time(1.1, .25));
+
+def cast_superglass():
+	pyautogui.keyDown('6');
+	pyautogui.keyUp('6');
+	time.sleep(fuzz_time(2.1, .25));
+
+
 
 if __name__ == "__main__":
 	try:
