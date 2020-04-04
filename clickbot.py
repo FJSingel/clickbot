@@ -3,8 +3,7 @@ usage = '''clickbot.py mode iteration_limit time_limit lag_constant
     mode: Which action you are repeating. See Mode list.
     iteration_limit: Number of item iteration before termination (eg: potions to be made)
     time_limit: Amount of time before termination in minutes
-    lag_constant: Multiplies wait times by this factor for laggy days
-'''
+    lag_constant: Multiplies wait times by this factor for laggy days'''
 
 modes = '''
 Modes
@@ -29,17 +28,18 @@ iteration_limit = 8000;
 second_limit = 4*60*60;
 start_second = int(time.time());
 iteration_count = 0;
-end_time = time.time();
+end_time = start_second;
 
 def main(argv):
+	global iteration_limit, second_limit, LAG_CONSTANT, end_time;
 	# I know this is terrible. Should put methods into a list later
 	which = int(argv[0]);
-	if len(argv > 1):
-		iteration_limit = int(argv[2]);
-	if len(argv > 2):
-		second_limit = int(argv[3]) * 60.0;
-	if len(argv > 3):
-		LAG_CONSTANT = float(argv[4]);
+	if len(argv) > 1:
+		iteration_limit = int(argv[1]);
+	if len(argv) > 2:
+		second_limit = int(argv[2]) * 60.0;
+	if len(argv) > 3:
+		LAG_CONSTANT = float(argv[3]);
 
 	end_time += second_limit;
 
@@ -65,8 +65,8 @@ def main(argv):
 		Herblore(False);
 	elif which == 10:
 		Fletching();
-	elif which = 11:
-		print "Coming Soon"
+	elif which == 11:
+		print("Coming Soon");
 	else:
 		help();
 
@@ -104,6 +104,8 @@ def Ivy():
 		print("Clicking done\n")
 
 def Superglass():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
 	print("Press CTRL+C to quit glassing")
 	time.sleep(1)
 	try:		
@@ -115,7 +117,9 @@ def Superglass():
 		print("Clicking done\n")
 
 def Alching():
-	print("Press CTRL+C to quit alching")
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	print("Press CTRL+C to quit alching");
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			pyautogui.moveTo(1735, 835, .5, pyautogui.easeInOutQuad)
@@ -126,6 +130,8 @@ def Alching():
 		print("Clicking done\n")
 
 def Combining():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
 	print("Press CTRL+C to quit combining")
 	time.sleep(1)
 	try:		
@@ -133,9 +139,11 @@ def Combining():
 			open_bank();
 			withdraw_preset('1');
 			press_hotkey('1');
-			pyautogui.press('space');	
+			pyautogui.press('space');
 			time.sleep(fuzz_time(14, .25));
 			iteration_count += 14;
+			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
+			print("Time remaining: {}".format(end_time - time.time()));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
@@ -177,6 +185,8 @@ Keys 1-3 need to be clean-mix-mix
 Do World 84 By the Combat Academy Chest
 '''
 def Herblore(cleaning):
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
 	print("Press CTRL+C to quit herblore")
 	time.sleep(1)
 	try:		
@@ -195,10 +205,13 @@ def Herblore(cleaning):
 			pyautogui.press('space');	
 			time.sleep(fuzz_time(10, .25));
 			iteration_count += 9
+			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
+			print("Time remaining: {}".format(end_time - second_limit));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
 def Fletching():
+	iteration_count = 0;
 	print("Press CTRL+C to quit fletching")
 	time.sleep(1)
 	try:		
@@ -247,8 +260,8 @@ def cast_superglass():
 	time.sleep(fuzz_time(2.1, .25));
 
 def help():
-	print usage;
-	print modes;
+	print(usage);
+	print(modes);
 
 if __name__ == "__main__":
 	try:
