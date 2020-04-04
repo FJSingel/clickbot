@@ -1,4 +1,11 @@
 #!/usr/bin/python
+usage = '''clickbot.py mode iteration_limit time_limit lag_constant
+    mode: Which action you are repeating. See Mode list.
+    iteration_limit: Number of item iteration before termination (eg: potions to be made)
+    time_limit: Amount of time before termination in minutes
+    lag_constant: Multiplies wait times by this factor for laggy days
+'''
+
 modes = '''
 Modes
 0: Measure coordinates
@@ -12,6 +19,7 @@ Modes
 8: Herblore Dirty
 9: Herblore clean
 10: Fletching
+11: Archeology
 '''
 
 import pyautogui, sys, time, random
@@ -57,8 +65,10 @@ def main(argv):
 		Herblore(False);
 	elif which == 10:
 		Fletching();
+	elif which = 11:
+		print "Coming Soon"
 	else:
-		print(modes);
+		help();
 
 def Measure():
 	try:
@@ -236,10 +246,12 @@ def cast_superglass():
 	pyautogui.keyUp('6');
 	time.sleep(fuzz_time(2.1, .25));
 
-
+def help():
+	print usage;
+	print modes;
 
 if __name__ == "__main__":
 	try:
 		main(sys.argv[1:])
 	except IndexError:
-		print (modes);
+		help();
