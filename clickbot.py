@@ -1,12 +1,13 @@
 #!/usr/bin/python
-usage = '''clickbot.py mode iteration_limit time_limit lag_constant
-    mode: Which action you are repeating. See Mode list.
-    iteration_limit: Number of item iteration before termination (eg: potions to be made)
-    time_limit: Amount of time before termination in minutes
-    lag_constant: Multiplies wait times by this factor for laggy days'''
+usage = '''clickbot.py [OPTION]... MODE 
+Executes the bot MODE (See MODE list) with the following options:
+    -i (iteration_limit): Number of item iteration before termination (eg: potions to be made)
+    -t (time_limit): Amount of time before termination in minutes
+    -l (lag_constant): Multiplies wait times by this factor for laggy days
+    -f (click_frequency): Determines number of seconds between clicks for Clicking MODE'''
 
 modes = '''
-Modes
+MODES
 0: Measure coordinates
 1: Ivy
 2: Superglass
@@ -18,31 +19,49 @@ Modes
 8: Herblore Dirty
 9: Herblore clean
 10: Fletching
-11: Archeology
+11: Clicking
+12: Archeology
 '''
 
-import pyautogui, sys, time, random
+import pyautogui, sys, time, random, getopt;
+from datetime import datetime, timedelta
 
 LAG_CONSTANT = 1.0;
-iteration_limit = 8000;
-second_limit = 4*60*60;
+iteration_limit = 10000;
+second_limit = 5*60*60;
 start_second = int(time.time());
 iteration_count = 0;
+click_frequency = 60;
 end_time = start_second;
 
 def main(argv):
-	global iteration_limit, second_limit, LAG_CONSTANT, end_time;
+	global iteration_limit, second_limit, LAG_CONSTANT, end_time, click_frequency;
 	# I know this is terrible. Should put methods into a list later
-	which = int(argv[0]);
-	if len(argv) > 1:
-		iteration_limit = int(argv[1]);
-	if len(argv) > 2:
-		second_limit = int(argv[2]) * 60.0;
-	if len(argv) > 3:
-		LAG_CONSTANT = float(argv[3]);
+
+	try:
+		opts, args = getopt.getopt(argv, "l:i:t:f:")
+	except (IndexError, getopt.GetoptError):
+		help();
+
+	for o, a in opts:
+		print(o);
+		if o in "-l":
+			LAG_CONSTANT = float(a);
+		elif o in "-i":
+			iteration_limit = int(a);
+		elif o in "-f":
+			click_frequency = int(a);
+		elif o in "-t":
+			second_limit = int(a) * 60.0;
 
 	end_time += second_limit;
 
+	print("Staring with the following parameters:");
+	print("Lag constant: {}".format(LAG_CONSTANT));
+	print("Max iterations: {}".format(iteration_limit));
+	print("Time limit: {} seconds".format(second_limit));
+
+	which = int(args[0]);
 	if which == 0:
 		Measure();
 	elif which == 1:
@@ -66,9 +85,14 @@ def main(argv):
 	elif which == 10:
 		Fletching();
 	elif which == 11:
+		print("Wait between clicks: {} seconds".format(click_frequency));
+		Clicking();
+	elif which == 12:
 		print("Coming Soon");
 	else:
 		help();
+
+	termination_message();
 
 def Measure():
 	try:
@@ -206,11 +230,12 @@ def Herblore(cleaning):
 			time.sleep(fuzz_time(10, .25));
 			iteration_count += 9
 			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - second_limit));
+			print("Time remaining: {}".format(end_time - time.time()));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
 def Fletching():
+	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
 	print("Press CTRL+C to quit fletching")
 	time.sleep(1)
@@ -220,7 +245,6 @@ def Fletching():
 			withdraw_preset('1');
 			press_hotkey('1');
 			press_hotkey('4');
-			pyautogui.click();
 			time.sleep(fuzz_time(1.1, .25));
 			pyautogui.press('space');	
 			time.sleep(fuzz_time(25, .25));
@@ -231,7 +255,25 @@ def Fletching():
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
-
+def Clicking():
+	global iteration_limit, end_time, second_limit, click_frequency;
+	iteration_count = 0;
+	print("Locking mouse coordinates in 3 seconds");
+	time.sleep(3);
+	x,y = pyautogui.position();
+	print("Press CTRL+C to quit clicking")
+	time.sleep(1)
+	try:		
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			pyautogui.moveTo(x, y, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			wait = fuzz_time(click_frequency, .1)
+			time.sleep(wait);
+			iteration_count += 1;
+			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
+			print("Time remaining: {}".format(end_time - time.time()));
+	except KeyboardInterrupt:
+		print("Clicking done\n")
 
 '''=====================Helper Methods====================='''
 
@@ -262,6 +304,9 @@ def cast_superglass():
 def help():
 	print(usage);
 	print(modes);
+
+def termination_message():
+	print("Consider logging off until {}".format(datetime.now() + timedelta(minutes=15)))
 
 if __name__ == "__main__":
 	try:
