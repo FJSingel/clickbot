@@ -143,16 +143,20 @@ def Superglass():
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
+#Lol, this gets you banned. Leave alching to the noobs.
 def Alching():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
 	print("Press CTRL+C to quit alching");
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
-			pyautogui.moveTo(1735, 835, .5, pyautogui.easeInOutQuad)
+			pyautogui.moveTo(1735, 750, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			pyautogui.click();
 			time.sleep(fuzz_time(2, .15));
+			iteration_count += 1;
+			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
+			print("Time remaining: {}".format(end_time - time.time()));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
@@ -167,7 +171,7 @@ def Combining():
 			withdraw_preset('1');
 			press_hotkey('1');
 			pyautogui.press('space');
-			time.sleep(fuzz_time(14, .25));
+			time.sleep(fuzz_time(16, .1));
 			iteration_count += 14;
 			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
 			print("Time remaining: {}".format(end_time - time.time()));
@@ -248,13 +252,15 @@ def Fletching():
 			withdraw_preset('1');
 			press_hotkey('1');
 			press_hotkey('4');
-			time.sleep(fuzz_time(1.1, .25));
+
 			pyautogui.press('space');	
-			time.sleep(fuzz_time(25, .25));
+			time.sleep(fuzz_time(26, .20));
 			press_hotkey('5');
 			pyautogui.press('space');	
 			time.sleep(fuzz_time(15, .25));
 			iteration_count += 14;
+			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
+			print("Time remaining: {}".format(end_time - time.time()));
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
