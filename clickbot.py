@@ -269,6 +269,7 @@ def Clicking():
 	x,y = pyautogui.position();
 	print("Press CTRL+C to quit clicking")
 	time.sleep(1)
+	drink_break = 0;
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			pyautogui.moveTo(x, y, .5, pyautogui.easeInOutQuad)
@@ -278,6 +279,10 @@ def Clicking():
 			iteration_count += 1;
 			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
 			print("Time remaining: {}".format(end_time - time.time()));
+			drink_break += 1;
+			if (drink_break == 21):
+				press_hotkey('f');
+				drink_break = 0;
 	except KeyboardInterrupt:
 		print("Clicking done\n")
 
