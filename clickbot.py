@@ -287,7 +287,7 @@ def Clicking():
 def GracefulArchaeology():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("Note: You need a charged Grace of the Elves for this to work");
+	print("Note: You need a charged Grace of the Elves and Autoscreener for this to work");
 	print("Locking mouse coordinates in 3 seconds");
 	time.sleep(3);
 	x,y = pyautogui.position();
@@ -297,10 +297,7 @@ def GracefulArchaeology():
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			pyautogui.moveTo(x, y, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
-			time.sleep(fuzz_time(15, .1));
-			press_hotkey('7');
-			press_hotkey('8');
-			press_hotkey('8');
+			time.sleep(fuzz_time(15, .4));
 			iteration_count += 1;
 			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
 			print("Time remaining: {}".format(end_time - time.time()));
@@ -311,24 +308,21 @@ def DepositArchaeology():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
 	print("This will lock two mouse coordinates to run between: A Materials Cart and a surveying point. Your inventory will fill with relics.");
-	print("You have 5 seconds to hover your mouse over the survey point when standing next to Materials Cart.");
-	time.sleep(5);
+	print("You have 3 seconds to hover your mouse over the survey point when standing next to Materials Cart.");
+	time.sleep(3);
 	surveyx,surveyy = pyautogui.position();
 	pyautogui.click();
-	print("You have 5 seconds to hover your mouse over the Materials Cart when standing next to survey point.");
-	time.sleep(5);
+	print("You have 6 seconds to hover your mouse over the Materials Cart when standing next to survey point.");
+	time.sleep(6);
 	cartx,carty = pyautogui.position();
 	pyautogui.click();
 	print("Press CTRL+C to quit Deposit Archeologing")
-	time.sleep(5)
+	time.sleep(3)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			pyautogui.moveTo(surveyx, surveyy, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
-			time.sleep(fuzz_time(90, .1));
-			press_hotkey('7');
-			for x in range(15):
-				press_hotkey('8');
+			time.sleep(fuzz_time(60, .1));
 			pyautogui.moveTo(cartx, carty, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			time.sleep(fuzz_time(4, .1));
@@ -345,7 +339,7 @@ def fuzz_time(min_time, pct_increase):
 	return (min_time * fuzz_factor * LAG_CONSTANT);
 
 def open_bank():
-	pyautogui.moveTo(922, 514, .5, pyautogui.easeInOutQuad)
+	pyautogui.moveTo(922, 514, .5, pyautogui.easeInOutQuad);
 	pyautogui.click();
 	time.sleep(fuzz_time(1.1, .25));
 
