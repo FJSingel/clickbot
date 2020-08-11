@@ -24,8 +24,20 @@ MODES
 13: Deposit Archaeology
 '''
 
-import pyautogui, sys, time, random, getopt;
+import pyautogui, sys, time, random, getopt, logging;
 from datetime import datetime, timedelta
+
+console = logging.StreamHandler(sys.stdout);
+console.setLevel(logging.INFO);
+
+logging.basicConfig(
+	level=logging.DEBUG,
+	format='%(asctime)s %(message)s',
+	handlers=[
+		logging.FileHandler("clickbot.log"),
+		console
+	]
+)
 
 LAG_CONSTANT = 1.0;
 iteration_limit = 10000;
@@ -45,7 +57,7 @@ def main(argv):
 		help();
 
 	for o, a in opts:
-		print(o);
+		logging.debug(o);
 		if o in "-l":
 			LAG_CONSTANT = float(a);
 		elif o in "-i":
@@ -57,10 +69,11 @@ def main(argv):
 
 	end_time += second_limit;
 
-	print("Staring with the following parameters:");
-	print("Lag constant: {}".format(LAG_CONSTANT));
-	print("Max iterations: {}".format(iteration_limit));
-	print("Time limit: {} seconds".format(second_limit));
+	logging.debug("===Staring with the following parameters===\n"
+		+ "\tLag constant: {}\n".format(LAG_CONSTANT)
+		+ "\tMax iterations: {}\n".format(iteration_limit)
+		+ "\tTime limit: {} seconds".format(second_limit)
+	);
 
 	which = int(args[0]);
 	if which == 0:
@@ -86,7 +99,7 @@ def main(argv):
 	elif which == 10:
 		Fletching();
 	elif which == 11:
-		print("Wait between clicks: {} seconds".format(click_frequency));
+		logging.debug("Wait between clicks: {} seconds".format(click_frequency));
 		Clicking();
 	elif which == 12:
 		GracefulArchaeology();
@@ -102,13 +115,13 @@ def Measure():
 		while True:
 			x,y = pyautogui.position();
 			positionString = "X:" + str(x) + " Y:" + str(y)
-			print(positionString)
+			logging.info(positionString)
 			time.sleep(.5)
 	except KeyboardInterrupt:
-		print("Coordinates are " + positionString)
+		logging.info("Coordinates are " + positionString)
 
 def Ivy():
-	print("Click to select coordinates for Ivy")
+	logging.info("Click to select coordinates for Ivy")
 	try:
 		positionString = ""
 		x = 0
@@ -116,11 +129,11 @@ def Ivy():
 		while True:
 			x,y = pyautogui.position();
 			positionString = "X:" + str(x) + " Y:" + str(y)
-			print(positionString)
+			logging.info(positionString)
 			time.sleep(.5)
 	except KeyboardInterrupt:
-		print("Coordinates are " + positionString)
-	print("Press CTRL+C to quit")
+		logging.info("Coordinates are " + positionString)
+	logging.info("Press CTRL+C to quit")
 	try:
 		while (time.time() < end_time):
 			fuzz_factor = random.random()/4 + .875
@@ -128,12 +141,12 @@ def Ivy():
 			pyautogui.click();
 			time.sleep(60*fuzz_factor)
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 def Superglass():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("Press CTRL+C to quit glassing")
+	logging.info("Press CTRL+C to quit glassing")
 	time.sleep(1)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
@@ -141,13 +154,13 @@ def Superglass():
 			withdraw_preset('2');
 			cast_superglass();
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 #Lol, this gets you banned. Leave alching to the noobs.
 def Alching():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("Press CTRL+C to quit alching");
+	logging.info("Press CTRL+C to quit alching");
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			pyautogui.moveTo(1735, 750, .5, pyautogui.easeInOutQuad)
@@ -155,15 +168,14 @@ def Alching():
 			pyautogui.click();
 			time.sleep(fuzz_time(2, .15));
 			iteration_count += 1;
-			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - time.time()));
+			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 def Combining():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("Press CTRL+C to quit combining")
+	logging.info("Press CTRL+C to quit combining")
 	time.sleep(1)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
@@ -173,30 +185,29 @@ def Combining():
 			pyautogui.press('space');
 			time.sleep(fuzz_time(16, .1));
 			iteration_count += 14;
-			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - time.time()));
+			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 def HallClicking():
-	print("Press CTRL+C to quit clicking")
+	logging.info("Press CTRL+C to quit clicking")
 	try:		
 		while (time.time() < end_time):
 			try:
 				mouseOver = pyautogui.locateCenterOnScreen('FadedMems.png');
 				pyautogui.click();
-				print(mouseOver)
+				logging.info(mouseOver)
 			except Exception as e:
-				print("Not found")
+				logging.info("Not found")
 			time.sleep(.2);
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 def Smithing():
-	print("Not yet Implemented:")
+	logging.info("Not yet Implemented:")
 
 def Idling():
-	print("Press CTRL+C to quit idling")
+	logging.info("Press CTRL+C to quit idling")
 	try:		
 		while True:
 			try:
@@ -205,10 +216,10 @@ def Idling():
 				pyautogui.keyUp('left');
 				time.sleep(fuzz_time(120, 1));
 			except Exception as e:
-				print("Not found")
+				logging.info("Not found")
 			time.sleep(.2);
 	except KeyboardInterrupt:
-		print("Idling done\n")
+		logging.info("Idling done\n")
 
 '''
 Note: This requires preset 1 to have a 9/9/9 split of Dirty Herb/Vial/Ingredient on 1
@@ -218,7 +229,7 @@ Do World 84 By the Combat Academy Chest
 def Herblore(cleaning):
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("Press CTRL+C to quit herblore")
+	logging.info("Press CTRL+C to quit herblore")
 	time.sleep(1)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
@@ -235,16 +246,15 @@ def Herblore(cleaning):
 			press_hotkey('3');
 			pyautogui.press('space');	
 			time.sleep(fuzz_time(10, .25));
-			iteration_count += 9
-			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - time.time()));
+			iteration_count += 9;
+			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 def Fletching():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("Press CTRL+C to quit fletching")
+	logging.info("Press CTRL+C to quit fletching")
 	time.sleep(1)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
@@ -259,18 +269,17 @@ def Fletching():
 			pyautogui.press('space');	
 			time.sleep(fuzz_time(15, .25));
 			iteration_count += 14;
-			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - time.time()));
+			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 def Clicking():
 	global iteration_limit, end_time, second_limit, click_frequency;
 	iteration_count = 0;
-	print("Locking mouse coordinates in 3 seconds");
+	logging.info("Locking mouse coordinates in 3 seconds");
 	time.sleep(3);
 	x,y = pyautogui.position();
-	print("Press CTRL+C to quit clicking")
+	logging.info("Press CTRL+C to quit clicking")
 	time.sleep(1)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
@@ -279,19 +288,19 @@ def Clicking():
 			wait = fuzz_time(click_frequency, .1)
 			time.sleep(wait);
 			iteration_count += 1;
-			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - time.time()));
+			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
+#Note: This also works for Mining, but got me banned once
 def GracefulArchaeology():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("Note: You need a charged Grace of the Elves and Autoscreener for this to work");
-	print("Locking mouse coordinates in 3 seconds");
+	logging.info("Note: You need a charged Grace of the Elves and Autoscreener for this to work");
+	logging.info("Locking mouse coordinates in 3 seconds");
 	time.sleep(3);
 	x,y = pyautogui.position();
-	print("Press CTRL+C to quit Archeologing with Grace")
+	logging.info("Press CTRL+C to quit Archeologing with Grace")
 	time.sleep(1)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
@@ -299,24 +308,23 @@ def GracefulArchaeology():
 			pyautogui.click();
 			time.sleep(fuzz_time(15, .4));
 			iteration_count += 1;
-			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - time.time()));
+			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		print("Clicking done\n")
+		logging.info("Clicking done\n")
 
 def DepositArchaeology():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
-	print("This will lock two mouse coordinates to run between: A Materials Cart and a surveying point. Your inventory will fill with relics.");
-	print("You have 3 seconds to hover your mouse over the survey point when standing next to Materials Cart.");
+	logging.info("This will lock two mouse coordinates to run between: A Materials Cart and a surveying point. Your inventory will fill with relics.");
+	logging.info("You have 3 seconds to hover your mouse over the survey point when standing next to Materials Cart.");
 	time.sleep(3);
 	surveyx,surveyy = pyautogui.position();
 	pyautogui.click();
-	print("You have 6 seconds to hover your mouse over the Materials Cart when standing next to survey point.");
+	logging.info("You have 6 seconds to hover your mouse over the Materials Cart when standing next to survey point.");
 	time.sleep(6);
 	cartx,carty = pyautogui.position();
 	pyautogui.click();
-	print("Press CTRL+C to quit Deposit Archeologing")
+	logging.info("Press CTRL+C to quit Deposit Archeologing")
 	time.sleep(3)
 	try:		
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
@@ -327,10 +335,9 @@ def DepositArchaeology():
 			pyautogui.click();
 			time.sleep(fuzz_time(4, .1));
 			iteration_count += 1;
-			print("Iterations: {}/{}".format(iteration_count, iteration_limit));
-			print("Time remaining: {}".format(end_time - time.time()));
+			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		print("Clicking done\n")	
+		logging.info("Clicking done\n")	
 
 '''=====================Helper Methods====================='''
 
@@ -361,9 +368,14 @@ def cast_superglass():
 def help():
 	print(usage);
 	print(modes);
+	termination_message();
+
+def log_progress(iteration_count, iteration_limit, end_time):
+	logging.info("Iterations: {}/{}".format(iteration_count, iteration_limit));
+	logging.info("Time remaining: {}".format(end_time - time.time()));
 
 def termination_message():
-	print("Consider logging off until {}".format(datetime.now() + timedelta(minutes=15)))
+	logging.info("Consider logging off for 15 minutes to lessen ban likelihood.")
 
 if __name__ == "__main__":
 	try:
