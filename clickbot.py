@@ -22,6 +22,7 @@ MODES
 11: Clicking
 12: Graceful Archeology
 13: Deposit Archaeology
+14: Agility
 '''
 
 import pyautogui, sys, time, random, getopt, logging;
@@ -105,6 +106,8 @@ def main(argv):
 		GracefulArchaeology();
 	elif which == 13:
 		DepositArchaeology();
+	elif which == 14:
+		Agility();
 	else:
 		help();
 
@@ -116,7 +119,7 @@ def Measure():
 			x,y = pyautogui.position();
 			positionString = "X:" + str(x) + " Y:" + str(y)
 			logging.info(positionString)
-			time.sleep(.5)
+			time.sleep(2)
 	except KeyboardInterrupt:
 		logging.info("Coordinates are " + positionString)
 
@@ -356,9 +359,109 @@ def DepositArchaeology():
 			iteration_count += 1;
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
-		logging.info("Clicking done\n")	
+		logging.info("Clicking done\n");
+
+def Agility():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	logging.info("This runs counterclockwise around the Anachronia Agility Course.");
+	logging.info("To prepare, set your Map corner to (1528, 446) and Anticipate to F.");
+	logging.info("Press CTRL+C to quit Agility.")
+	time.sleep(3)
+	clickOn(1550, 83, 1);
+	pyautogui.keyDown("up");
+	time.sleep(.5);
+	pyautogui.keyUp("up");
+	try:		
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			pyautogui.keyDown("-"); #Excalibur for health
+			pyautogui.keyUp("-");
+			clickOn(893, 608, 2);
+			clickOn(856, 507, 2);
+			clickOn(861, 570, 2);
+			clickOn(586, 655, 5);
+			clickOn(1620, 320, 5);
+			clickOn(875, 550, 1);
+			clickOn(1700, 340, 5.3);
+			clickOn(994, 553, 3);
+			clickOn(1740, 380, 6);
+			clickOn(950, 640, 2.5);
+			clickOn(1660, 904, 6);
+			clickOn(1887, 350, 7);
+			clickOn(1000, 500, 2);
+			pyautogui.keyDown("f");
+			pyautogui.keyUp("f");
+			clickOn(1790, 390, 7);
+			clickOn(950, 580, 3);
+			clickOn(1800, 285, 4);
+			clickOn(1000, 500, 2);
+			clickOn(1370, 510, 5);
+			clickOn(1200, 540, 3);
+			clickOn(1800, 213, 6);
+			clickOn(1111, 500, 3.5);
+			clickOn(1810, 139, 6); #Long run to east vines kinda loose
+			clickOn(950, 400, 4);
+			clickOn(975, 42, 6);
+			clickOn(1200, 444, 4);
+			clickOn(1200, 167, 6);
+			clickOn(1325, 68, 5.5);
+			clickOn(1100, 275, 4.5);
+			clickOn(1214, 600, 3.5);
+			pyautogui.keyDown("f");
+			pyautogui.keyUp("f");
+			clickOn(1841, 285, 6.2);
+			clickOn(1020, 540, 1.1);
+			pyautogui.keyDown("=");
+			pyautogui.keyUp("=");
+			time.sleep(.6);
+			clickOn(1820, 250, 4);
+			clickOn(1040, 550, 3);
+			clickOn(1234, 476, 4);
+			clickOn(1117, 450, 3);
+			clickOn(1035, 200, 4);
+			clickOn(1250, 283, 3);
+			clickOn(1725, 163, 4);
+			clickOn(960, 420, 2);
+			clickOn(333, 45, 6);
+			clickOn(173, 136, 7);
+			clickOn(1720, 165, 5);
+			clickOn(960, 467, 3);
+			clickOn(787, 53, 6);
+			clickOn(922, 408, 3);
+			clickOn(350, 450, 5);
+			clickOn(650, 507, 3.5);
+			clickOn(733, 520, 3);
+			clickOn(733, 520, 3);
+			clickOn(608, 36, 4);
+			clickOn(742, 413, 3.5); #Bone bridge
+			clickOn(717, 480, 4);
+			clickOn(721, 576, 3);
+			clickOn(1642, 88, 7);
+			clickOn(868, 555, 2);
+			clickOn(644, 488, 3);
+			clickOn(1629, 300, 4.5);
+			clickOn(950, 570, 1.5);
+			clickOn(950, 830, 2.5);
+			clickOn(950, 732, 2);
+			clickOn(1661, 275, 3);
+			clickOn(865, 547, 3); #Tunnel
+			clickOn(806, 493, 3);
+			clickOn(950, 881, 3);
+			clickOn(631, 785, 4);
+			clickOn(1033, 951, 3);
+			clickOn(1065, 618, 3);
+			clickOn(1677, 424, 8);
+			clickOn(1715, 310, 3);
+			iteration_count += 1;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Clicking done\n");
 
 '''=====================Helper Methods====================='''
+def clickOn(x, y, length):
+	pyautogui.moveTo(x, y, .5, pyautogui.easeInOutQuad)
+	pyautogui.click();
+	time.sleep(fuzz_time(2.0 * length, .1));
 
 def fuzz_time(min_time, pct_increase):
 	fuzz_factor = (random.random() * pct_increase) + 1;
