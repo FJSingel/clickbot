@@ -16,7 +16,7 @@ MODES
 5: HoM Div Clicks
 6: Smithing
 7: Idling
-8: Herblore Dirty
+8: Clean Herbs w/ Cape
 9: Herblore clean
 10: Fletching
 11: Clicking
@@ -93,7 +93,7 @@ def main(argv):
 	elif which == 7:
 		Idling();
 	elif which == 8:
-		Herblore(True);
+		Cleaning();
 	elif which == 9:
 		Herblore(False);
 	elif which == 10:
@@ -188,6 +188,24 @@ def Combining():
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
 		logging.info("Clicking done\n")
+
+def Cleaning():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	logging.info("Press CTRL+C to quit cleaning")
+	time.sleep(1)
+	try:		
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			open_bank();
+			withdraw_preset('1');
+			press_hotkey('2');
+			pyautogui.press('space');
+			time.sleep(fuzz_time(5, .1));
+			iteration_count += 28;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Cleaning done\n")
+
 
 def HallClicking():
 	logging.info("Press CTRL+C to quit clicking")
@@ -347,19 +365,19 @@ def fuzz_time(min_time, pct_increase):
 	return (min_time * fuzz_factor * LAG_CONSTANT);
 
 def open_bank():
-	pyautogui.moveTo(922, 514, .5, pyautogui.easeInOutQuad);
+	pyautogui.moveTo(955, 650, .5, pyautogui.easeInOutQuad);
 	pyautogui.click();
 	time.sleep(fuzz_time(1.1, .25));
 
 def withdraw_preset(preset):
 	pyautogui.keyDown(preset);
 	pyautogui.keyUp(preset);
-	time.sleep(fuzz_time(1.1, .25));
+	time.sleep(fuzz_time(1, .25));
 
 def press_hotkey(hotkey):
 	pyautogui.keyDown(hotkey);
 	pyautogui.keyUp(hotkey);
-	time.sleep(fuzz_time(1.1, .25));
+	time.sleep(fuzz_time(1, .25));
 
 def cast_superglass():
 	pyautogui.keyDown('6');
