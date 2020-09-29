@@ -192,6 +192,7 @@ def Combining():
 	except KeyboardInterrupt:
 		logging.info("Clicking done\n")
 
+# About 20k/hour, but gets you banned. 2Hours at Invention Guild
 def Cleaning():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
@@ -201,9 +202,8 @@ def Cleaning():
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			open_bank();
 			withdraw_preset('1');
-			press_hotkey('2');
+			press_hotkey('6');
 			pyautogui.press('space');
-			time.sleep(fuzz_time(5, .1));
 			iteration_count += 28;
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
@@ -319,6 +319,7 @@ def GracefulArchaeology():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
 	logging.info("Note: You need a charged Grace of the Elves and Autoscreener for this to work");
+	logging.info("Note: This will also press 6 regularly for Elven Shard for Imp Souled");
 	logging.info("Locking mouse coordinates in 3 seconds");
 	time.sleep(3);
 	x,y = pyautogui.position();
@@ -329,6 +330,8 @@ def GracefulArchaeology():
 			pyautogui.moveTo(x, y, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			time.sleep(fuzz_time(15, .4));
+			if iteration_count % 4 == 0:
+				press_hotkey('6'); #Ancient Elven Ritual Shard goes in 6
 			iteration_count += 1;
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
@@ -337,13 +340,14 @@ def GracefulArchaeology():
 def DepositArchaeology():
 	global iteration_limit, end_time, second_limit;
 	iteration_count = 0;
+	seconds_to_cart = 6;
 	logging.info("This will lock two mouse coordinates to run between: A Materials Cart and a surveying point. Your inventory will fill with relics.");
 	logging.info("You have 3 seconds to hover your mouse over the survey point when standing next to Materials Cart.");
 	time.sleep(3);
 	surveyx,surveyy = pyautogui.position();
 	pyautogui.click();
 	logging.info("You have 6 seconds to hover your mouse over the Materials Cart when standing next to survey point.");
-	time.sleep(6);
+	time.sleep(seconds_to_cart);
 	cartx,carty = pyautogui.position();
 	pyautogui.click();
 	logging.info("Press CTRL+C to quit Deposit Archeologing")
@@ -355,7 +359,7 @@ def DepositArchaeology():
 			time.sleep(fuzz_time(60, .1));
 			pyautogui.moveTo(cartx, carty, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
-			time.sleep(fuzz_time(4, .1));
+			time.sleep(fuzz_time(seconds_to_cart, .1));
 			iteration_count += 1;
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
