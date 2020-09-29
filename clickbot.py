@@ -23,6 +23,7 @@ MODES
 12: Graceful Archeology
 13: Deposit Archaeology
 14: Agility
+15: Cooking
 '''
 
 import pyautogui, sys, time, random, getopt, logging;
@@ -108,6 +109,8 @@ def main(argv):
 		DepositArchaeology();
 	elif which == 14:
 		Agility();
+	elif which == 15:
+		Cooking();
 	else:
 		help();
 
@@ -259,7 +262,7 @@ def Herblore(cleaning):
 			press_hotkey('1');
 			if cleaning:
 				press_hotkey('1');
-				pyautogui.press('space');	
+				pyautogui.press('space');
 				time.sleep(fuzz_time(6, .25));
 			press_hotkey('1');
 			pyautogui.press('space');	
@@ -460,6 +463,39 @@ def Agility():
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
 		logging.info("Clicking done\n");
+
+'''
+Need to stand by Prif GE desk by bonfire
+'''
+def Cooking():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	seconds_to_fire = 3;
+	logging.info("You have 3 seconds to hover your mouse over the Bonfire point when standing next to Bank.");
+	time.sleep(3);
+	firex,firey = pyautogui.position();
+	pyautogui.click();
+	logging.info("You have 3 seconds to hover your mouse over the Bank when standing next to bonfire.");
+	time.sleep(3);
+	bankx,banky = pyautogui.position();
+	pyautogui.click();
+	logging.info("Press CTRL+C to quit Cooking")
+	time.sleep(3)
+	try:		
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			press_hotkey('1');
+			pyautogui.moveTo(firex, firey, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(seconds_to_fire, .1));			
+			pyautogui.press('space');
+			time.sleep(fuzz_time(66, .1));
+			pyautogui.moveTo(bankx, banky, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(seconds_to_fire, .1));		
+			iteration_count += 28;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Cooking done\n");
 
 '''=====================Helper Methods====================='''
 def clickOn(x, y, length):
