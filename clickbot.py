@@ -390,66 +390,66 @@ def Agility():
 		while (time.time() < end_time) and (iteration_count < iteration_limit):
 			pyautogui.keyDown("-"); #Excalibur for health
 			pyautogui.keyUp("-");
-			clickOn(893, 608, 2);
-			clickOn(856, 507, 2);
-			clickOn(861, 570, 2);
-			clickOn(586, 655, 5);
-			clickOn(1620, 320, 5);
-			clickOn(875, 550, 1);
-			clickOn(1700, 340, 5.3);
-			clickOn(994, 553, 3);
-			clickOn(1740, 380, 6);
-			clickOn(950, 640, 2.5);
-			clickOn(1660, 904, 6);
-			clickOn(1887, 350, 7);
-			clickOn(1000, 500, 2);
-			pyautogui.keyDown("f");
+			clickOn(893, 608, 2.2); #start
+			clickOn(856, 507, 2.2); #cliff
+			clickOn(861, 570, 2.5); #cliff
+			clickOn(586, 655, 5); #vine
+			clickOn(1620, 320, 4); #walk
+			clickOn(875, 550, 1.4); #Climb over root
+			clickOn(1700, 340, 5); #walk
+			clickOn(994, 553, 3); #vine
+			clickOn(1740, 380, 6); #walk
+			clickOn(950, 640, 2.5); #cliff
+			clickOn(1660, 904, 4.6); #tree hop?
+			clickOn(1887, 350, 7); #walk
+			clickOn(1000, 500, 2); #cliff
+			pyautogui.keyDown("f"); #Freedom
 			pyautogui.keyUp("f");
-			clickOn(1790, 390, 7);
-			clickOn(950, 580, 3);
-			clickOn(1800, 285, 4);
-			clickOn(1000, 500, 2);
+			clickOn(1790, 390, 6);
+			clickOn(950, 580, 3.3); #Climb cliff face by dino
+			clickOn(1800, 285, 4); #walk
+			clickOn(1000, 500, 2.3); #block
 			clickOn(1370, 510, 5);
 			clickOn(1200, 540, 3);
-			clickOn(1800, 213, 6);
-			clickOn(1111, 500, 3.5);
-			clickOn(1810, 139, 6); #Long run to east vines kinda loose
+			clickOn(1800, 213, 5); #I think this is the NE movement to a ruins block climb
+			clickOn(1111, 500, 3.5); #Climbing ruins
+			clickOn(1810, 139, 5.5); #Long run to east vines kinda loose
 			clickOn(950, 400, 4);
 			clickOn(975, 42, 6);
 			clickOn(1200, 444, 4);
-			clickOn(1200, 167, 6);
+			clickOn(1200, 167, 6.3);
 			clickOn(1325, 68, 5.5);
 			clickOn(1100, 275, 4.5);
-			clickOn(1214, 600, 3.5);
-			pyautogui.keyDown("f");
+			clickOn(1214, 600, 3);
+			pyautogui.keyDown("f"); #Freedom
 			pyautogui.keyUp("f");
-			clickOn(1841, 285, 6.2);
-			clickOn(1020, 540, 1.1);
-			pyautogui.keyDown("=");
+			clickOn(1841, 285, 5.3);
+			clickOn(1020, 540, 1.5);
+			pyautogui.keyDown("="); #Surge
 			pyautogui.keyUp("=");
-			time.sleep(.6);
-			clickOn(1820, 250, 4);
-			clickOn(1040, 550, 3);
-			clickOn(1234, 476, 4);
-			clickOn(1117, 450, 3);
-			clickOn(1035, 200, 4);
-			clickOn(1250, 283, 3);
-			clickOn(1725, 163, 4);
-			clickOn(960, 420, 2);
-			clickOn(333, 45, 6);
-			clickOn(173, 136, 7);
-			clickOn(1720, 165, 5);
-			clickOn(960, 467, 3);
-			clickOn(787, 53, 6);
-			clickOn(922, 408, 3);
-			clickOn(350, 450, 5);
+			time.sleep(1.5);
+			clickOn(1820, 250, 4); #walk
+			clickOn(1040, 550, 3); #vine
+			clickOn(1234, 476, 4); #vine
+			clickOn(1117, 450, 3); #root
+			clickOn(1035, 200, 4); #root
+			clickOn(1250, 283, 3); #block
+			clickOn(1725, 163, 4); #walk
+			clickOn(960, 420, 2); #sunken
+			clickOn(333, 45, 6); #root
+			clickOn(173, 136, 7); #vine onto WC Jungle mesa
+			clickOn(1720, 165, 5); #walk
+			clickOn(960, 467, 3.3); #vine
+			clickOn(787, 53, 6); #vine
+			clickOn(922, 408, 3); #root
+			clickOn(350, 450, 4.5); #Begin ruined wall by herby
 			clickOn(650, 507, 3.5);
-			clickOn(733, 520, 3);
+			clickOn(733, 520, 2.7); #Get off HW wall
 			clickOn(733, 520, 3);
 			clickOn(608, 36, 4);
 			clickOn(742, 413, 3.5); #Bone bridge
 			clickOn(717, 480, 4);
-			clickOn(721, 576, 3);
+			clickOn(721, 576, 2.7);
 			clickOn(1642, 88, 7);
 			clickOn(868, 555, 2);
 			clickOn(644, 488, 3);
