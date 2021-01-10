@@ -24,7 +24,9 @@ MODES
 13: Deposit Archaeology
 14: Agility
 15: Cooking
-16: Firemaking
+16: Fishing
+17: Jellyfishing
+18: Firemaking
 '''
 
 import pyautogui, sys, time, random, getopt, logging;
@@ -113,7 +115,13 @@ def main(argv):
 	elif which == 15:
 		Cooking();
 	elif which == 16:
+		Fishing();
+	elif which == 17:
+		Jellyfishing();
+	elif which == 18:
 		Firemaking();
+	elif which == 69:
+		Sandbox();
 	else:
 		help();
 
@@ -496,11 +504,53 @@ def Cooking():
 			press_hotkey('7'); #Try to send an urn if possible
 			pyautogui.moveTo(bankx, banky, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
-			time.sleep(fuzz_time(seconds_to_fire, .1));		
+			time.sleep(fuzz_time(seconds_to_fire, .1));
 			iteration_count += 28;
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
 		logging.info("Cooking done\n");
+'''
+Fishing in Menaphos VIP area
+'''
+def Fishing():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	try:
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			scan_for_vip_fishing();
+			time.sleep(fuzz_time(70, .1));
+			press_hotkey('space');
+			press_hotkey('7'); #Put your decorated Urn here
+			open_vip_bank();
+			press_hotkey('1');
+			iteration_count += 25;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Fishing done\n");
+
+def Jellyfishing():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	logging.info("Just stand on the NW most corner of the chest boat.");
+	clickOn(1550, 83, 1);
+	try:
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			for x in range(6):
+				scan_for_jellyfish();
+				time.sleep(fuzz_time(20, .1));
+			press_hotkey('7'); #Put your decorated Urn here	
+			clickOn(1086, 569, 1);
+			press_hotkey('1');
+			iteration_count += 25;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Fishing done\n");
+
+'''
+Just whatever you feel like testing goes here
+'''
+def Sandbox():
+	open_vip_bank();
 
 '''
 Need to stand by Prif GE desk by bonfire
@@ -547,6 +597,47 @@ def open_bank():
 	pyautogui.moveTo(955, 650, .5, pyautogui.easeInOutQuad);
 	pyautogui.click();
 	time.sleep(fuzz_time(1.1, .25));
+
+def open_vip_bank():
+	# mouseOver = pyautogui.locateCenterOnScreen('VIPChestSample.png');
+	mouseOver = pyautogui.locateCenterOnScreen('ChectSpareSample.png');
+	if mouseOver == None:
+		logging.error("Chest not found");
+		raise Exception;
+	pyautogui.moveTo(mouseOver[0], mouseOver[1], .5, pyautogui.easeInOutQuad);
+	pyautogui.click();
+	time.sleep(fuzz_time(4, .25));
+
+def scan_for_vip_fishing():
+	x_coords = [1200, 1240, 1280, 1320, 1360, 1400, 1440, 1480];
+	found = False;
+	for x in x_coords:
+		pyautogui.moveTo(x, 625, .5, pyautogui.easeInOutQuad);
+		mouseOver = pyautogui.locateCenterOnScreen('FishBait.png');
+		if mouseOver != None:
+			pyautogui.click();
+			found = True;
+			break;
+	if found == False:
+		logging.error("Fish not found");
+		raise Exception;
+
+def scan_for_jellyfish():
+	jelly_coords = [[532,504],[800,450],[1408,505]];
+	jelly_pics = ["BlueJellyFish.png", "GreenJellyFish.png"];
+	found = False;
+	while found == False:
+		for pic in jelly_pics:
+			if found == True:
+				break;
+			for x, y in jelly_coords:
+				pyautogui.moveTo(x, y, .5, pyautogui.easeInOutQuad);
+				mouseOver = pyautogui.locateCenterOnScreen(pic);
+				if mouseOver != None:
+					pyautogui.click();
+					found = True;
+					break;
+
 
 def withdraw_preset(preset):
 	pyautogui.keyDown(preset);
