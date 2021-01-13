@@ -10,21 +10,24 @@ modes = '''
 MODES
 0: Measure coordinates
 1: Ivy
-2: Superglass
-3: Alching
+2: Superglass (Risky)
+3: Alching (Risky)
 4: Combining
 5: HoM Div Clicks
-6: Smithing
+6: Smithing (Smithing)
 7: Idling
-8: Clean Herbs w/ Cape
+8: Clean Herbs w/ Cape (Risky)
 9: Herblore clean
 10: Fletching
 11: Clicking
 12: Graceful Archeology
 13: Deposit Archaeology
 14: Agility
-15: Cooking
+15: Cooking/Firemaking
 16: Fishing
+17: Jellyfishing
+18: Divomatic
+19: Manufacturing
 '''
 
 import pyautogui, sys, time, random, getopt, logging;
@@ -116,6 +119,10 @@ def main(argv):
 		Fishing();
 	elif which == 17:
 		Jellyfishing();
+	elif which == 18:
+		DivOMatic();
+	elif which == 19:
+		Manufacturing();
 	elif which == 69:
 		Sandbox();
 	else:
@@ -434,8 +441,8 @@ def Agility():
 			clickOn(1117, 450, 3); #root
 			clickOn(1035, 200, 4); #root
 			clickOn(1250, 283, 3); #block
-			clickOn(1725, 163, 4); #walk
-			clickOn(960, 420, 2); #sunken
+			clickOn(1725, 163, 4.2); #walk
+			clickOn(960, 420, 2.2); #sunken
 			clickOn(333, 45, 6); #root
 			clickOn(173, 136, 7); #vine onto WC Jungle mesa
 			clickOn(1720, 165, 5); #walk
@@ -540,11 +547,43 @@ def Jellyfishing():
 	except KeyboardInterrupt:
 		logging.info("Fishing done\n");
 
+def DivOMatic():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	try:
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			find_and_click_on_wisp();
+			iteration_count += 1;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Divining done\n");
+
+'''
+Creates things at an invention table, but mostly Divine Charges
+Augs take 3 seconds each (-f = 180)
+Charges 2.4 seconds each (-f = 144)
+Siphons 1.8 seconds each (-f = 108)
+'''
+def Manufacturing():
+	global iteration_limit, end_time, second_limit, click_frequency;
+	iteration_count = 0;
+	logging.info("Press CTRL+C to quit manufacturing")
+	time.sleep(1)
+	try:		
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			clickOn(950, 470, 1);
+			pyautogui.press('space');
+			time.sleep(fuzz_time(click_frequency, .05));
+			iteration_count += 60;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Manufacturing done\n")
+
 '''
 Just whatever you feel like testing goes here
 '''
 def Sandbox():
-	open_vip_bank();
+	reset_to_spring();
 
 '''=====================Helper Methods====================='''
 def clickOn(x, y, length):
@@ -601,6 +640,61 @@ def scan_for_jellyfish():
 					found = True;
 					break;
 
+def find_and_click_on_wisp():
+	clicked = False;
+	while not clicked:
+		clicked = click_on_wisp();
+	wait_for_no_image('DivXP.png');
+
+def click_on_wisp():
+	mouseOver = wait_for_image('LuminousWispSample.png');
+	pyautogui.moveTo(mouseOver[0], mouseOver[1], .1, pyautogui.easeInOutQuad);
+	pyautogui.click();
+	logging.info("Clicking on Wisp.");
+	time.sleep(fuzz_time(3.5, .25));
+
+	 #See if we're getting xp. If not, try again.
+	mouseOver = pyautogui.locateCenterOnScreen('DivXP.png');
+	if mouseOver == None:
+		logging.info("Click failed. Searching again...");
+		return False;
+	return True;
+
+def wait_for_image(image):
+	mouseOver = pyautogui.locateCenterOnScreen(image);
+	attempt_no = 0;
+	while mouseOver == None:
+		misses = 0;
+		attempt_no += 1;
+		logging.info("Could not find " + image + ". Searching again...");
+		time.sleep(.5);
+		mouseOver = pyautogui.locateCenterOnScreen(image);
+		if attempt_no % 5 == 0:
+			misses += reset_to_spring(misses);
+			if misses == 5:
+				raise Exception("Cannot reset successfully. Terminating.");
+	return mouseOver;
+
+def wait_for_no_image(image):
+	mouseOver = pyautogui.locateCenterOnScreen(image);
+	if mouseOver != None:
+		logging.info(image + " found. Searching again...");
+		time.sleep(4);
+		wait_for_no_image(image);
+	else:
+		logging.info(image + " not found. Continuing...");
+
+'''The Spring map image is cropped because if a wisp crosses 
+the section we're looking for, we won't be able to find it.'''
+def reset_to_spring(misses):
+	logging.info("Attempting to locate spring to recenter...");
+	mouseOver = pyautogui.locateCenterOnScreen("SpringCenter.png");
+	if mouseOver == None:
+		logging.info("Spring not found.");
+		return misses + 1;
+	pyautogui.moveTo(mouseOver[0], mouseOver[1], .4, pyautogui.easeInOutQuad);
+	pyautogui.click();
+	return 0;
 
 def withdraw_preset(preset):
 	pyautogui.keyDown(preset);
