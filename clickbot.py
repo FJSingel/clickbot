@@ -26,8 +26,9 @@ MODES
 15: Cooking/Firemaking
 16: Fishing
 17: Jellyfishing
-18: Divomatic
-19: Manufacturing
+18: Firemaking
+19: Divomatic
+20: Manufacturing
 '''
 
 import pyautogui, sys, time, random, getopt, logging;
@@ -120,8 +121,10 @@ def main(argv):
 	elif which == 17:
 		Jellyfishing();
 	elif which == 18:
-		DivOMatic();
+		Firemaking();
 	elif which == 19:
+		DivOMatic();
+	elif which == 20:
 		Manufacturing();
 	elif which == 69:
 		Sandbox();
@@ -203,7 +206,8 @@ def Combining():
 			withdraw_preset('1');
 			press_hotkey('1');
 			pyautogui.press('space');
-			time.sleep(fuzz_time(16, .1));
+			time.sleep(fuzz_time(11, .1));
+			#time.sleep(fuzz_time(16, .1));
 			iteration_count += 14;
 			log_progress(iteration_count, iteration_limit, end_time);
 	except KeyboardInterrupt:
@@ -249,10 +253,10 @@ def Idling():
 	try:		
 		while True:
 			try:
-				pyautogui.keyDown('left');
+				pyautogui.keyDown('0');
 				time.sleep(fuzz_time(.1, 3));
-				pyautogui.keyUp('left');
-				time.sleep(fuzz_time(120, 1));
+				pyautogui.keyUp('0');
+				time.sleep(fuzz_time(10, 1));
 			except Exception as e:
 				logging.info("Not found")
 			time.sleep(.2);
@@ -502,7 +506,8 @@ def Cooking():
 			pyautogui.click();
 			time.sleep(fuzz_time(seconds_to_fire, .1));			
 			pyautogui.press('space');
-			time.sleep(fuzz_time(66, .1));
+			time.sleep(fuzz_time(64, .1));
+			press_hotkey('7'); #Try to send an urn if possible
 			pyautogui.moveTo(bankx, banky, .5, pyautogui.easeInOutQuad)
 			pyautogui.click();
 			time.sleep(fuzz_time(seconds_to_fire, .1));
@@ -584,6 +589,37 @@ Just whatever you feel like testing goes here
 '''
 def Sandbox():
 	reset_to_spring();
+
+'''
+Need to stand by Prif GE desk by bonfire
+'''
+def Firemaking():
+	global iteration_limit, end_time, second_limit;
+	iteration_count = 0;
+	seconds_to_fire = 3;
+	logging.info("You have 3 seconds to hover your mouse over the Bonfire point when standing next to Bank.");
+	time.sleep(3);
+	firex,firey = pyautogui.position();
+	pyautogui.click();
+	logging.info("You have 3 seconds to hover your mouse over the Bank when standing next to bonfire.");
+	time.sleep(3);
+	bankx,banky = pyautogui.position();
+	pyautogui.click();
+	logging.info("Press CTRL+C to quit Blazing")
+	time.sleep(3)
+	try:		
+		while (time.time() < end_time) and (iteration_count < iteration_limit):
+			press_hotkey('1');
+			pyautogui.moveTo(firex, firey, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(115, .1));
+			pyautogui.moveTo(bankx, banky, .5, pyautogui.easeInOutQuad)
+			pyautogui.click();
+			time.sleep(fuzz_time(seconds_to_fire, .1));		
+			iteration_count += 28;
+			log_progress(iteration_count, iteration_limit, end_time);
+	except KeyboardInterrupt:
+		logging.info("Blazing done\n");
 
 '''=====================Helper Methods====================='''
 def clickOn(x, y, length):
